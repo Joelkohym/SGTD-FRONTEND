@@ -1,12 +1,12 @@
 import React, { useRef } from "react";
+import { sharedFlexCenter, Image, Section } from "../styles/global";
 import {
-  sharedButtonStyle,
-  sharedFlexCenter,
-  Image,
-  sharedFlexSpaceBetween,
-} from "../styles/global";
-import FormController from "../components/FormController";
-import { API_Methods, AlertType, AppRoutes, Response_Message, formFieldTypes } from "../lib/constants";
+  API_Methods,
+  AlertType,
+  AppRoutes,
+  Response_Message,
+  formFieldTypes,
+} from "../lib/constants";
 import styled, { css } from "styled-components";
 import AppColors from "../styles/colors";
 import { FormTitle, Link, LogoContainer } from "./Login";
@@ -16,6 +16,9 @@ import { useResetAtom } from "jotai/utils";
 import { popupAtom } from "../jotai/store";
 import { useAtom } from "jotai";
 import Popup from "../components/Popup";
+import Button from "../components/Button";
+import { Controller, useForm } from "react-hook-form";
+import Input from "../components/Input";
 
 function Register() {
   const navigate = useNavigate();
@@ -25,16 +28,15 @@ function Register() {
   const alertMessage = useRef({
     type: "",
     message: "",
-    action: () => {}
+    action: () => {},
   });
   const { input, password, email, submit, text, url } = formFieldTypes;
-
+  const { control, handleSubmit } = useForm();
   const formFields = {
     fields: [
       {
         name: "email",
         label: "Email",
-        placeholder: "Email",
         defaultValue: "",
         type: input,
         inputType: email,
@@ -44,25 +46,24 @@ function Register() {
       {
         name: "password",
         label: "Password",
-        placeholder: "Password",
         defaultValue: "",
         inputType: password,
         type: password,
         style: InputStyle,
         enableInputStyleWithValue: true,
-      }, {
+      },
+      {
         name: "api_key",
         label: "API Key",
-        placeholder: "Enter SGTD pitstop API KEY",
         defaultValue: "",
         type: input,
         inputType: text,
         style: InputStyle,
         enableInputStyleWithValue: true,
-      }, {
+      },
+      {
         name: "participant_id",
         label: "Participant ID",
-        placeholder: "Enter SGTD pitstop Participant ID",
         defaultValue: "",
         type: input,
         inputType: text,
@@ -72,7 +73,6 @@ function Register() {
       {
         name: "gsheet_cred_path",
         label: "Gsheet cred path",
-        placeholder: "Enter gsheet_cred_path",
         defaultValue: "",
         type: input,
         inputType: text,
@@ -82,7 +82,6 @@ function Register() {
       {
         name: "pitstop_url",
         label: "Pitstop URL",
-        placeholder: "Enter Pitstop URL",
         defaultValue: "",
         type: url,
         inputType: url,
@@ -111,8 +110,8 @@ function Register() {
       alertMessage.current = {
         type: AlertType.Error,
         message: "Fields cannot be empty",
-        action: resetPopup
-      }
+        action: resetPopup,
+      };
       handlePopup();
       return;
     }
@@ -125,31 +124,24 @@ function Register() {
         gsheet_cred_path: data.gsheet_cred_path,
         pitstop_url: data.pitstop_url,
       };
-      let res:any = await registerUser(API_Methods.Register,requestData)
-      if (res.status == 200) {
+      let res: any = await registerUser(API_Methods.Register, requestData);
+      if (res) {
         alertMessage.current = {
           type: AlertType.Success,
           message: "Registered SuccessFully, Login now",
           action: () => {
-            navigate(AppRoutes.Login)
-            resetPopup()
-          }
-        }
-        handlePopup()
-      } else if (res.status == 409) {
-        alertMessage.current = {
-          type: AlertType.Error,
-          message: "Your email exists in database! Please reach out to Admin if you need assistance",
-          action: resetPopup
-        }
+            navigate(AppRoutes.Login);
+            resetPopup();
+          },
+        };
         handlePopup();
       }
     } catch (error) {
       alertMessage.current = {
         type: AlertType.Error,
         message: "Something went wrong. Try again",
-        action: resetPopup
-      }
+        action: resetPopup,
+      };
       handlePopup();
     }
   };
@@ -164,81 +156,219 @@ function Register() {
   }
 
   return (
-    <RegisterPage>
+    <Section>
       <Header>
         <LogoContainer>
           <Image src="https://sgtradex.com/images/sgtradex-logo.svg" />
         </LogoContainer>
-        <SideTitle>
-          Already have an account?{" "}
-          <SideLink href={AppRoutes.Login}> Login</SideLink>{" "}
-        </SideTitle>
       </Header>
       <FormContainer>
-        <Title>REGISTRATION FORM</Title>
-        <FormController formFields={formFields} isFormRow />
+        <Title>Registration Form</Title>
+        <Form>
+          <FieldContainer>
+            {formFields?.fields?.map(
+              (formField: any, index: React.Key | null | undefined) => (
+                <FormFieldContainer key={index}>
+                  <Field>
+                    {formField.defaultValue !== "undefined" && ( //Temporary approach. will be checked once api's available
+                      <Controller
+                        name={formField.name}
+                        control={control}
+                        defaultValue={formField.defaultValue}
+                        render={({ field }) => (
+                          <>
+                            <Input
+                              title={formField.name}
+                              value={field.value ?? formField.defaultValue}
+                              type={formField.inputType}
+                              inputStyle={formField.style}
+                              required={
+                                formField.required && formField.required
+                              }
+                              defaultValue={formField.defaultValue}
+                              placeholder={formField.placeholder}
+                              readOnly={formField.readOnly}
+                              disabled={formField.disabled}
+                              enableInputStyleWithValue={
+                                formField?.enableInputStyleWithValue
+                              }
+                            />
+                          </>
+                        )}
+                      />
+                    )}
+                    <Label htmlFor="text" className="label-name">
+                      <ContentName className="content-name">
+                        {formField.label}
+                      </ContentName>
+                    </Label>
+                  </Field>
+                </FormFieldContainer>
+              )
+            )}
+          </FieldContainer>
+          {formFields?.buttons?.map(
+            (
+              { name, type, onSubmitHandler, style }: any,
+              index: React.Key | null | undefined
+            ) => (
+              <FormFieldContainer>
+                <Button
+                  key={index}
+                  title={name}
+                  clickHandler={
+                    type === submit
+                      ? handleSubmit(onSubmitHandler)
+                      : onSubmitHandler
+                  }
+                  buttonStyle={style}
+                />
+              </FormFieldContainer>
+            )
+          )}{" "}
+          <SideTitle>
+            Already have an account?{" "}
+            <SideLink href={AppRoutes.Login}> Login</SideLink>{" "}
+          </SideTitle>
+        </Form>
       </FormContainer>
       {popupData.isOpen && <Popup />}
-    </RegisterPage>
+    </Section>
   );
 }
 
 export default Register;
 
-const RegisterPage = styled.div`
-  height: 100vh;
-  background: linear-gradient(
-    135deg,
-    ${AppColors.ThemeBlue},
-    ${AppColors.ThemeLightPurple}
-  );
-`;
-
 const Header = styled.div`
-  width: 100%;
-  ${sharedFlexSpaceBetween}
-  align-self: flex-start;
+  align-self: center;
 `;
 
 const Title = styled(FormTitle)`
-  color: ${AppColors.White};
+  font-size: 3.5rem;
+  background: linear-gradient(
+    to right,
+    ${AppColors.ThemeBlue},
+    ${AppColors.ThemePurple},
+    ${AppColors.ThemeAqua},
+    ${AppColors.ThemePurple}
+  );
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  margin: 1.5rem 0;
 `;
 
 const SideTitle = styled.div`
-  align-self: flex-end;
-  padding: 0 2rem 3rem 0;
+  align-self: center;
+  padding: 1rem;
 `;
 
 const FormContainer = styled.div`
   ${sharedFlexCenter}
   flex-direction: column;
+  background: ${AppColors.White};
+  width: 60%;
 `;
 
-const InputStyle = css`
-  background-color: ${AppColors.ThemeLightTransparencyBlack};
-  padding: 0.75rem 1rem;
-  border-width: 0 0 2px 0px;
-  margin: 0.5rem 0;
-  border-color: ${AppColors.ThemeBlack};
-  border-radius: 1rem;
-  outline: none;
-  width: 90%;
-  &:focus {
-    border-color: ${AppColors.ThemeBlue};
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-  }
-  &::placeholder {
-    color: ${AppColors.ThemeLightBlack};
-  }
+const FieldContainer = styled.div`
+  ${sharedFlexCenter};
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+`;
+const ContentName = styled.span`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding-bottom: 10px;
+  transition: all 0.3s ease;
+`;
+const Form = styled.form`
+  ${sharedFlexCenter}
+  width:90%;
+  flex-direction: column;
+  letter-spacing: 0.5px;
+`;
+
+const FormFieldContainer = styled.div`
+  ${sharedFlexCenter}
+  width:40%;
+  flex-direction: column;
+  margin-top: 0.25rem;
+  height: 4rem;
+  overflow: hidden;
+`;
+
+const Field = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+`;
+
+const Label = styled.label`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  font-weight:400;
+  border-bottom: 2px solid ${AppColors.ThemeLightGrey};
+  &::after {
+    content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-bottom: 2px solid ${AppColors.ThemeSkyBlue};
+  transform: translateX(-100%);
+  transition: all 0.3s ease;
 `;
 
 const btnStyle = css`
-  ${sharedButtonStyle}
-  width:15rem;
+  width: 15rem;
   margin: 2rem;
+  padding: 1rem;
+  font-size: 1.2rem;
+  background: linear-gradient(90deg, ${AppColors.ThemeAqua}, transparent)
+    ${AppColors.ThemeDarkPurple};
+  transition: background-color 1s;
+  &:hover {
+    background-color: ${AppColors.ThemeAqua};
+    background: linear-gradient(
+        90deg,
+        ${AppColors.ThemeDarkPurple},
+        transparent
+      )
+      ${AppColors.ThemeAqua};
+  }
 `;
 
 const SideLink = styled(Link)`
-  color: ${AppColors.White};
+  color: ${AppColors.ThemeSkyBlue};
+`;
+
+const InputStyle = css`
+  margin: 0;
+  border: none;
+  width: 90%;
+  font-size: 1.1rem;
+  padding: 0.7rem 0;
+  font-weight: 400;
+  &:focus,
+  &.hasText {
+    border: none;
+    + ${Label} ${ContentName}, &:valid + ${Label} ${ContentName} {
+      transform: translateY(-100%);
+      font-size: 14px;
+      left: 0;
+      color: ${AppColors.ThemeSkyBlue};
+    }
+
+    + ${Label}::after, &:valid + ${Label}::after {
+      transform: translateX(0%);
+    }
+  }
 `;

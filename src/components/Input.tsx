@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled, { RuleSet } from 'styled-components';
 import AppColors from '../styles/colors';
 
@@ -18,9 +18,15 @@ interface InputProps {
 }
 
 const Input: React.FC<InputProps> = ({ title, onFocus, inputStyle, disabled,type, placeholder, value, onChangeHandler, readOnly = false, required = false, defaultValue, enableInputStyleWithValue }) => {
+    const [hasText, setHasText] = useState(false);
 
     const handleInputChange = (e: any) => {   
         onChangeHandler && onChangeHandler(e.target.value);
+        if(e.target.value){
+            setHasText(true)
+        } else {
+            setHasText(false)
+        }
     }
 
     return (
@@ -39,6 +45,8 @@ const Input: React.FC<InputProps> = ({ title, onFocus, inputStyle, disabled,type
             disabled={disabled}
             defaultValue={defaultValue}
             $enableInputStyleWithValue={enableInputStyleWithValue && (value !== "")}
+            onBlur={() => setHasText(!!value)}
+            className={hasText ? 'hasText' : ''}
         ></InputElement>
     )
 }
