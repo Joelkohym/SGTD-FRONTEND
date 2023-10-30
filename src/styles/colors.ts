@@ -5,7 +5,7 @@ enum AppColors {
     ThemeLightGrey = "#f4f4f4",
    
     ThemeBlack = "#000000",
-    ThemeLightBlack = "#212120",
+    ThemeLightBlack = "#474747",
     ThemePrimaryTransparencyBlack = "#0000000f",
     ThemeTransparencyBlack = "#0000008f",
     ThemeLightTransparencyBlack = "#0000001a",

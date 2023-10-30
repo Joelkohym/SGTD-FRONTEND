@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaExpand, FaSignOutAlt, FaTable } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight, FaExpand, FaSignOutAlt, FaTable } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 import { TbBrandGoogleBigQuery, TbTriangleSquareCircle } from "react-icons/tb";
 import styled from "styled-components";
@@ -40,16 +40,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <DrawerContainer>
       <SideMenu $showMenu={showMenu}>
-        <DrawerIconContainer
-          $showMenu={showMenu}
-          $isActive={false}
-          onClick={() => {
-            setShowMenu(!showMenu);
-          }}
-        >
-          {showMenu ?  <MdClose size={25}/> :<FaExpand size={20}/> }
-        </DrawerIconContainer>
-        <LogoContainer $showMenu={showMenu}>
+        <LogoContainer>
             <Image src="https://sgtradex.com/images/sgtradex-logo.svg"/>
         </LogoContainer>
         <NavItem>
@@ -62,7 +53,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     onClick={() => navigate(btnData.link)}
                     key={index}
                   >
-                    <div>{btnData.icon}</div>
+                    <NavIcon>{btnData.icon}</NavIcon>
                     {showMenu && <NavTitle>{btnData.label}</NavTitle>}
                   </NavLink>
                                 )
@@ -70,6 +61,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </NavItem>
       </SideMenu>
       <Page>
+        <DrawerIconContainer
+          $showMenu={showMenu}
+          $isActive={false}
+          onClick={() => {
+            setShowMenu(!showMenu);
+          }}
+        >
+          {showMenu ?  <FaAngleRight size={24}/> : <FaAngleLeft size={24}/> }
+        </DrawerIconContainer>
         <PageContent>{children}</PageContent>
       </Page>
     </DrawerContainer>
@@ -93,42 +93,44 @@ const NavLink = styled.a<{ $showMenu: boolean; $isActive: boolean }>`
     line-height: 1.25rem;
     padding: 0.8rem 0;
     justify-content: ${(props) => (props.$showMenu ? `flex-start` : `center`)};
-    background: ${(props) => (props.$isActive ? AppColors.ThemeLightTransparencyBlack : "")};
+    background: ${(props) => (props.$isActive ? AppColors.ThemeSkyBlue : "")};
     text-decoration: none;
-    margin: 0.1rem 0;
+    border-bottom: 1px solid ${AppColors.ThemeTransparencyWhite};
     &:hover{
-      background: ${AppColors.ThemeLightTransparencyBlack};
+      background: ${AppColors.ThemeSkyBlue};
     }
 `;
 
 const DrawerIconContainer = styled(NavLink)`
   cursor: pointer;
   width: max-content;
-  align-self: ${(props) => (props.$showMenu ? `flex-end` : `center`)}
+  background:  ${AppColors.ThemeLightBlack};
+  border-radius:0.2rem;
+  padding:0.5rem;
+  margin: 1rem;
+  position: absolute;
+  &:hover{
+    background:  ${AppColors.ThemeLightBlack}
+  }
 `;
 
-const LogoContainer = styled.div<{$showMenu: boolean}>`
+const LogoContainer = styled.div`
     ${sharedFlexCenter}
-    height: ${(props) => props.$showMenu ? "12%": "5%"};
-    padding-top: 2.5rem;
+    height: 12%;
+    padding-top: 5.5rem;
 `
 
 const SideMenu = styled.div<{ $showMenu: boolean }>`
   height: 100vh;
   ${sharedFlexCenter}
   flex-direction: column;
-  background-color: ${AppColors.ThemeBlue};
-  background: linear-gradient(
-  180deg,
-  ${AppColors.ThemeBlue},
-  ${AppColors.ThemeLightPurple});
-  box-shadow: 0 8px 2px -2px ${AppColors.ThemeLightGrey};
-  width: ${(props) => (props.$showMenu ? `15%` : `5%`)}
+  background-color: ${AppColors.ThemeLightBlack};
+  width: ${(props) => (props.$showMenu ? `20rem` : `0%`)}
 `;
 
 const NavItem = styled.div`
   height: 90%;
-  width: 95%;
+  width: 100%;
   display:flex;
   align-Items: center;
   flex-direction: column;
@@ -137,6 +139,10 @@ const NavItem = styled.div`
   margin-right: 0.5rem;
   
 `;
+
+const NavIcon = styled.div`
+  padding-left: 1rem;
+`
 
 const NavTitle = styled.div`
   margin-left: 1.25rem;
@@ -147,9 +153,9 @@ const Page = styled.div`
 `;
 
 const PageContent = styled.div`
-  height: 95%;
+  height: 100%;
   flex-direction: column;
   ${sharedFlexCenter}
-  width: 98%;
+  width: 100%;
 `;
 
