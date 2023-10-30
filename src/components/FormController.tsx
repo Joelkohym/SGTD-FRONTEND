@@ -120,7 +120,6 @@ const Field = styled.div<{ $row?: boolean }>`
 
 const Label = styled.label`
   font-weight: 600;
-  font-family: Lato, sans-serif;
   font-size: 0.875rem;
   line-height: 1.25rem;
   margin-right: 1rem;

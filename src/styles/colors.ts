@@ -1,5 +1,7 @@
 enum AppColors {
     White = "#ffffff",
+    ThemeTransparencyWhite = "#ffffff21",
+    ThemeTransparencyWhiteLight = "#ffffff12",
     ThemeLightGrey = "#f4f4f4",
    
     ThemeBlack = "#000000",
@@ -10,11 +12,12 @@ enum AppColors {
 
 
     ThemeLightGreen = "#7db43b",
+    ThemeGreen = "#088f72" ,
 
-    ThemeBlue = "#0062ff",
+    ThemeBlue = "#1845ad",
     ThemeBlueShadow = "#d5dcef",
 
-    ThemePurple = "#8610AD",
+    ThemePurple = "#b92f90",
     ThemeLightPurple = "#da61ff",
     ThemeLightestPurple = "#e09ded",
 

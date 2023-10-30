@@ -28,12 +28,13 @@ export const Section = styled.div`
   width: 100vw;
   height: 100vh;
   background: linear-gradient(
-    135deg,
+    180deg,
     ${AppColors.ThemeBlue},
-    ${AppColors.ThemeLightPurple}
+    ${AppColors.ThemePurple}
   );
   ${sharedFlexCenter}
   flex-direction: column;
+  justify-content: flex-start;
 `;
 
 export{
