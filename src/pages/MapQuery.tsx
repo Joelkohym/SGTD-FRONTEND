@@ -1,12 +1,12 @@
 import React from "react";
 import Layout from "../components/Layout";
 import FormController from "../components/FormController";
-import { sharedButtonStyle } from "../styles/global";
+import { styledInputStyle, submitButtonStyle } from "../styles/global";
 import { AppRoutes, formFieldTypes } from "../lib/constants";
 import { useNavigate } from "react-router-dom";
-import { FormContainer, Title } from "./VesselETA";
+import { BlueCircle, Container, OrangeCircle, StyledFormContainer, Title } from "./VesselETA";
 
-const VesselQuery: React.FC = () => {
+const MapQuery: React.FC = () => {
   const navigate = useNavigate();
   const { input, submit, text } = formFieldTypes;
 
@@ -14,11 +14,12 @@ const VesselQuery: React.FC = () => {
     fields: [
       {
         name: "vessel_imo",
-        label: "Vessel IMO Number",
-        placeholder: "i.e. 9000000,9111111,92222222",
+        label: "Vessel IMO(s)",
+        placeholder: "i.e. 9000000, 9000001, 9000002",
         defaultValue: "",
         type: input,
         inputType: text,
+        style: styledInputStyle
       },
     ],
     buttons: [
@@ -26,7 +27,7 @@ const VesselQuery: React.FC = () => {
         name: "Request",
         type: submit,
         onSubmitHandler: (data: any) => handleVesselQueryRequest(data),
-        style: sharedButtonStyle,
+        style: submitButtonStyle,
       },
     ],
   };
@@ -36,12 +37,16 @@ const VesselQuery: React.FC = () => {
   }
   return (
     <Layout>
-      <FormContainer>
-        <Title>Vessel Request form</Title>
+      <Container>
+      <BlueCircle />
+      <OrangeCircle />
+      <StyledFormContainer>
+        <Title> Map Query 🗺️</Title>
         <FormController formFields={formFields} />
-      </FormContainer>
+      </StyledFormContainer>
+      </Container>
     </Layout>
   );
 };
 
-export default VesselQuery;
+export default MapQuery;
