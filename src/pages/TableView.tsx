@@ -14,6 +14,9 @@ import { PDFColumns, columns } from "../lib/dummyData";
 import { useLocation } from "react-router-dom";
 import { useMakePOSTRequest } from "../hooks/useMakePostRequest";
 import { API_Methods } from "../lib/constants";
+import { useAtom } from "jotai";
+import { loaderAtom } from "../jotai/store";
+import Loader from "../components/Loader";
 
 function TableView() {
   const { state } = useLocation();
@@ -21,20 +24,25 @@ function TableView() {
   const tableRef = useRef(null);
   const [getVesselTableData] = useMakePOSTRequest();
   const [tableData, setTableData] = useState<any>([]);
+  const [isLoading, setIsLoading] = useAtom(loaderAtom);
 
   useEffect(() => {
+    setIsLoading(true);
     getTableData();
   }, [imo]);
 
   const getTableData = async () => {
+    setIsLoading(true);
     try {
       let res: any = await getVesselTableData(API_Methods.Table_view, {
         imo: imo,
       });
       if (res) {
         setTableData(res.data);
+        setIsLoading(false);
       }
     } catch (error) {
+      setIsLoading(false);
       console.log("Error");
     }
   };
@@ -106,39 +114,44 @@ function TableView() {
   };
 
   return (
-    <Layout>
-      <Container>
-        <ToastContainer
-          position="bottom-right"
-          autoClose={2000}
-          transition={Slide}
-        />
-        <BtnContainer>
-          <Button
-            title={"PDF"}
-            clickHandler={exportToPDF}
-            buttonStyle={btnStyle}
+    <>
+      <Layout>
+        <Container>
+          <ToastContainer
+            position="bottom-right"
+            autoClose={2000}
+            transition={Slide}
           />
+          <BtnContainer>
+            <Button
+              title={"PDF"}
+              clickHandler={exportToPDF}
+              buttonStyle={btnStyle}
+            />
 
-          <StyledCSVLink filename="vessel_data.csv" data={csvData}>
-            CSV
-          </StyledCSVLink>
-          <Button
-            title={"COPY"}
-            clickHandler={copyTable}
-            buttonStyle={btnStyle}
-          />
-        </BtnContainer>
-        <TableContainer ref={tableRef}>
-          <Table
-            title={"Table view"}
-            data={tableData}
-            columns={columns}
-            id={"my-table"}
-          />
-        </TableContainer>
-      </Container>
-    </Layout>
+            <StyledCSVLink filename="vessel_data.csv" data={csvData}>
+              CSV
+            </StyledCSVLink>
+            <Button
+              title={"COPY"}
+              clickHandler={copyTable}
+              buttonStyle={btnStyle}
+            />
+          </BtnContainer>
+          {!isLoading && (
+            <TableContainer ref={tableRef}>
+              <Table
+                title={"Table view"}
+                data={tableData}
+                columns={columns}
+                id={"my-table"}
+              />
+            </TableContainer>
+          )}
+        </Container>
+      </Layout>
+      {isLoading && <Loader />}
+    </>
   );
 }
 

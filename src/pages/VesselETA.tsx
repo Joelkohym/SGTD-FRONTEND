@@ -21,9 +21,10 @@ import {
 import { useMakePOSTRequest } from "../hooks/useMakePostRequest";
 import { useNavigate } from "react-router-dom";
 import { useResetAtom } from "jotai/utils";
-import { popupAtom } from "../jotai/store";
+import { loaderAtom, popupAtom } from "../jotai/store";
 import { useAtom } from "jotai";
 import Popup from "../components/Popup";
+import Loader from "../components/Loader";
 
 const VesselETA: React.FC = () => {
   const { input, submit, text } = formFieldTypes;
@@ -32,6 +33,7 @@ const VesselETA: React.FC = () => {
   const resetPopup = useResetAtom(popupAtom);
   const [popupData, setPopupData] = useAtom(popupAtom);
   const alertMessage = useRef("");
+  const [isLoading, setIsLoading] = useAtom(loaderAtom);
 
   const formFields = {
     fields: [
@@ -56,12 +58,16 @@ const VesselETA: React.FC = () => {
   };
 
   const handleVesselQuery = async (data: any) => {
+    setIsLoading(true);
     try {
       let res = await getVesselTableData(API_Methods.Table_view, {
         imo: data.vessel_imo,
       });
-      if(res) navigate(AppRoutes.TableView,{ state: { imo: data.vessel_imo}});
+      setIsLoading(false);
+      if (res)
+        navigate(AppRoutes.TableView, { state: { imo: data.vessel_imo } });
     } catch (error) {
+      setIsLoading(false);
       alertMessage.current = "IMO(s) could not found";
       handlePopData();
     }
@@ -77,17 +83,20 @@ const VesselETA: React.FC = () => {
   }
 
   return (
-    <Layout>
-      <Container>
-        <BlueCircle />
-        <OrangeCircle />
-        <StyledFormContainer>
-          <Title>Vessel ETA Query 🕗</Title>
-          <FormController formFields={formFields} />
-        </StyledFormContainer>
-        {popupData.isOpen && <Popup />}
-      </Container>
-    </Layout>
+    <>
+      <Layout>
+        <Container>
+          <BlueCircle />
+          <OrangeCircle />
+          <StyledFormContainer>
+            <Title>Vessel ETA Query 🕗</Title>
+            <FormController formFields={formFields} />
+          </StyledFormContainer>
+          {popupData.isOpen && <Popup />}
+        </Container>
+      </Layout>
+      {isLoading && <Loader />}
+    </>
   );
 };
 

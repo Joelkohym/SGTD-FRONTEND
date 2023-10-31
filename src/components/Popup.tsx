@@ -42,7 +42,7 @@ const Popup : React.FC = () => {
 
 export default Popup
 
-const OverlayLayer = styled.div`
+export const OverlayLayer = styled.div`
   position: absolute;
   top: 0px;
   left: 0px;
