@@ -6,7 +6,7 @@ import Layout from "../components/Layout";
 import styled from "styled-components";
 import { mapData } from "../lib/mapData";
 import PolygonMarker from "../components/PolygonMarker";
-import { sharedFlexCenter } from "../styles/global";
+import { Section, sharedFlexCenter } from "../styles/global";
 import VesselMarker from "../components/VesselMarker";
 
 const VesselMap = () => {
@@ -49,7 +49,7 @@ const MapSection = styled.div`
   height: 35rem;
   border: 2px solid black;
 `;
-const Container = styled.div`
+const Container = styled(Section)`
   width: 100%;
   height: 100vh;
   ${sharedFlexCenter}
