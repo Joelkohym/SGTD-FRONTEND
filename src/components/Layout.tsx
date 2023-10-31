@@ -19,7 +19,7 @@ interface LayoutProps {
 const NavButtonData = [
   {
     label: "Position Map",
-    link: AppRoutes.VesselQuery,
+    link: AppRoutes.MapQuery,
     icon: <FaMapMarkedAlt size ={25}/>,
     isPublic: true,
   },
@@ -86,6 +86,7 @@ const DrawerContainer = styled.div`
   display: flex;
   width: 100vw;
   height: 100vh;
+  overflow:hidden;
 `;
 const NavLink = styled.a<{ $showMenu: boolean; $isActive: boolean }>`
   display: flex;

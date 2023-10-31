@@ -121,8 +121,8 @@ export const BlueCircle = styled.div`
     ${AppColors.ThemeLightBlue}
   );
   ${sharedCircleStyle}
-  left: 13rem;
-  top: 1rem;
+  left: 20%;
+  top: 5%;
 `;
 
 export const OrangeCircle = styled.div`
@@ -132,6 +132,6 @@ export const OrangeCircle = styled.div`
     ${AppColors.ThemeDarkYellow}
   );
   ${sharedCircleStyle}
-  left: 38rem;
-  top: 30rem;
+  right: 20%;
+  bottom: 10%;
 `;

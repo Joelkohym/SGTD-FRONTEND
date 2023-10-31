@@ -12,7 +12,7 @@ export const AppRoutes = {
   Home : "/home",
   Login : "/",
   Register: "/register",
-  VesselQuery: "/vesselQuery",
+  MapQuery: "/MapQuery",
   TableView : "/tableView",
   TriangularModule: "/triangularModule",
   VesselMap: "/VesselMap",
