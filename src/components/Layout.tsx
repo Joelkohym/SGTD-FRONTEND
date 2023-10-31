@@ -31,7 +31,7 @@ const NavButtonData = [
   },
   {
     label: "Logout",
-    link: ``,
+    link: AppRoutes.Login,
     icon: <FaSignOutAlt size={25} />,
     isPublic: true,
   },
@@ -54,7 +54,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <NavLink
                   $isActive={location.pathname == btnData.link}
                   $showMenu={showMenu}
-                  onClick={() => navigate(btnData.link)}
+                  onClick={() => {
+                    if (btnData.label == "Logout") localStorage.removeItem('access_token')
+                    navigate(btnData.link)
+                  }}
                   key={index}
                 >
                   <NavIcon>{btnData.icon}</NavIcon>
