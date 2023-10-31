@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Layout from "../components/Layout";
 import Table from "../components/Table";
 import styled, { css } from "styled-components";
@@ -10,10 +10,34 @@ import { CSVLink } from "react-csv";
 import AppColors from "../styles/colors";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { PDFColumns, columns, tableData } from "../lib/dummyData";
+import { PDFColumns, columns } from "../lib/dummyData";
+import { useLocation } from "react-router-dom";
+import { useMakePOSTRequest } from "../hooks/useMakePostRequest";
+import { API_Methods } from "../lib/constants";
 
 function TableView() {
+  const { state } = useLocation();
+  const { imo } = state;
   const tableRef = useRef(null);
+  const [getVesselTableData] = useMakePOSTRequest();
+  const [tableData, setTableData] = useState<any>([]);
+
+  useEffect(() => {
+    getTableData();
+  }, [imo]);
+
+  const getTableData = async () => {
+    try {
+      let res: any = await getVesselTableData(API_Methods.Table_view, {
+        imo: imo,
+      });
+      if (res) {
+        setTableData(res.data);
+      }
+    } catch (error) {
+      console.log("Error");
+    }
+  };
 
   const exportToPDF = () => {
     const unit = "pt";
@@ -31,20 +55,29 @@ function TableView() {
       body: [...tableData],
       columns: PDFColumns,
     });
-    doc.save("report.pdf");
+    doc.save("Vessel_data.pdf");
   };
 
   const csvData = [
-    ["INDEX", "Due To Arrive Time", "locationFrom", "Vessel Name", "Call Sign", "IMO number","Flag", "Due To Depart Time"],
-    ...tableData.map(({ index, duetoArriveTime, locationFrom, vesselName, callSign, IMOnumber, flag,dueToDepartTime }) => [
-      index + 1,
-      duetoArriveTime,
-      locationFrom,
-      vesselName,
-      callSign,
-      IMOnumber,
-      flag,
-      dueToDepartTime
+    [
+      "INDEX",
+      "Due To Arrive Time",
+      "locationFrom",
+      "Vessel Name",
+      "Call Sign",
+      "IMO number",
+      "Flag",
+      "Due To Depart Time",
+    ],
+    ...tableData.map((data: any) => [
+      data.index + 1,
+      data.duetoArriveTime,
+      data.locationFrom,
+      data.vesselName,
+      data.callSign,
+      data["IMO number"],
+      data.flag,
+      data.dueToDepartTime,
     ]),
   ];
 
@@ -87,7 +120,7 @@ function TableView() {
             buttonStyle={btnStyle}
           />
 
-          <StyledCSVLink filename="my-file.csv" data={csvData}>
+          <StyledCSVLink filename="vessel_data.csv" data={csvData}>
             CSV
           </StyledCSVLink>
           <Button
@@ -116,7 +149,7 @@ const TableContainer = styled.div`
 `;
 
 const Container = styled(Section)`
-  width:100%;
+  width: 100%;
 `;
 
 const BtnContainer = styled.div`

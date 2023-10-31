@@ -8,6 +8,7 @@ export function useMakePOSTRequest() {
       for (let key in params) {
         data += key + "=" + params[key] + "&";
       }
+      let accessToken = localStorage.getItem("access_token")
      const requestOptions: any = {
         method: "POST",
         headers: {
@@ -15,9 +16,13 @@ export function useMakePOSTRequest() {
         },
         body: data,
       };
-
+      if (accessToken) {
+        console.log("inside")
+        requestOptions.headers.Authorization = `Bearer ${accessToken}`;
+      } 
+     console.log("requestOptions", requestOptions)
       fetch(API_ENDPOINT + methodEndpoint, requestOptions)
-        .then((response) => response.json())
+        .then((response) => response.json() ?? response.text())
           .then( (response) => {
            resolve(response)
         }

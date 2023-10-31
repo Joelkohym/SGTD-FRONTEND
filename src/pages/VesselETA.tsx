@@ -4,7 +4,6 @@ import {
   API_Methods,
   AlertType,
   AppRoutes,
-  Response_Message,
   formFieldTypes,
 } from "../lib/constants";
 import styled from "styled-components";
@@ -24,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { useResetAtom } from "jotai/utils";
 import { popupAtom } from "../jotai/store";
 import { useAtom } from "jotai";
+import Popup from "../components/Popup";
 
 const VesselETA: React.FC = () => {
   const { input, submit, text } = formFieldTypes;
@@ -56,18 +56,13 @@ const VesselETA: React.FC = () => {
   };
 
   const handleVesselQuery = async (data: any) => {
-    navigate(AppRoutes.TableView);
     try {
       let res = await getVesselTableData(API_Methods.Table_view, {
         imo: data.vessel_imo,
       });
-      if (res == Response_Message.Success) {
-      } else {
-        alertMessage.current = "Login Failed! Try Again";
-        handlePopData();
-      }
+      if(res) navigate(AppRoutes.TableView,{ state: { imo: data.vessel_imo}});
     } catch (error) {
-      alertMessage.current = "Login Failed! Try Again";
+      alertMessage.current = "IMO(s) could not found";
       handlePopData();
     }
   };
@@ -90,6 +85,7 @@ const VesselETA: React.FC = () => {
           <Title>Vessel ETA Query 🕗</Title>
           <FormController formFields={formFields} />
         </StyledFormContainer>
+        {popupData.isOpen && <Popup />}
       </Container>
     </Layout>
   );
