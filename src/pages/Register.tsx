@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { sharedFlexCenter, Image, Section } from "../styles/global";
+import { sharedFlexCenter, Image, Section, FormTitle } from "../styles/global";
 import {
   API_Methods,
   AlertType,
@@ -9,7 +9,7 @@ import {
 } from "../lib/constants";
 import styled, { css } from "styled-components";
 import AppColors from "../styles/colors";
-import { FormTitle, Link, LogoContainer } from "./Login";
+import { Link, LogoContainer } from "./Login";
 import { useNavigate } from "react-router-dom";
 import { useMakePOSTRequest } from "../hooks/useMakePostRequest";
 import { useResetAtom } from "jotai/utils";

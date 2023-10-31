@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { FaAngleLeft, FaAngleRight, FaExpand, FaSignOutAlt, FaTable } from "react-icons/fa";
-import { MdClose } from "react-icons/md";
-import { TbBrandGoogleBigQuery, TbTriangleSquareCircle } from "react-icons/tb";
+import { FaAngleLeft, FaAngleRight, FaSignOutAlt, FaTable } from "react-icons/fa";
+import { TbBrandGoogleBigQuery } from "react-icons/tb";
 import styled from "styled-components";
 import AppColors from "../styles/colors";
 import { Image, sharedFlexCenter } from "../styles/global";

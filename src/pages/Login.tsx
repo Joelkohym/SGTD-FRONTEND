@@ -1,9 +1,11 @@
 import styled, { css } from "styled-components";
 import {
   Image,
-  sharedFlexSpaceBetween,
   Section,
-  sharedFlexCenter,
+  submitButtonStyle,
+  styledInputStyle,
+  FormContainer,
+  FormTitle,
 } from "../styles/global";
 import AppColors from "../styles/colors";
 import {
@@ -19,9 +21,7 @@ import { useResetAtom } from "jotai/utils";
 import { popupAtom } from "../jotai/store";
 import { useAtom } from "jotai";
 import { useRef } from "react";
-import { Controller, useForm } from "react-hook-form";
-import Input from "../components/Input";
-import Button from "../components/Button";
+import FormController from "../components/FormController";
 
 function Login() {
   const navigate = useNavigate();
@@ -31,7 +31,6 @@ function Login() {
   const [popupData, setPopupData] = useAtom(popupAtom);
   const alertMessage = useRef("");
 
-  const { control, handleSubmit } = useForm(); //TODO: controller is used to register external component(i.e Input, dropdown) values to form.
   const formFields = {
     fields: [
       {
@@ -58,7 +57,7 @@ function Login() {
         name: "Log In",
         type: submit,
         onSubmitHandler: (data: any) => handleLogin(data),
-        style: loginButtonStyle,
+        style: submitButtonStyle,
       },
       {
         name: "Register",
@@ -109,63 +108,7 @@ function Login() {
       </LogoContainer>
       <FormContainer>
         <FormTitle>Login Here</FormTitle>
-        {/* <FormController formFields={formFields} /> */}
-        <Form>
-          {formFields?.fields?.map(
-            (formField: any, index: React.Key | null | undefined) => (
-              <FormFieldContainer key={index}>
-                <Field>
-                  <Label>{formField.label}</Label>
-                  {formField.defaultValue !== "undefined" && ( //Temporary approach. will be checked once api's available
-                    <Controller
-                      name={formField.name}
-                      control={control}
-                      defaultValue={formField.defaultValue}
-                      render={({ field }) => (
-                        <>
-                          <Input
-                            title={formField.name}
-                            value={field.value ?? formField.defaultValue}
-                            onChangeHandler={field.onChange}
-                            type={formField.inputType}
-                            inputStyle={formField.style}
-                            required={formField.required && formField.required}
-                            defaultValue={formField.defaultValue}
-                            placeholder={formField.placeholder}
-                            readOnly={formField.readOnly}
-                            disabled={formField.disabled}
-                            enableInputStyleWithValue={
-                              formField?.enableInputStyleWithValue
-                            }
-                          />
-                        </>
-                      )}
-                    />
-                  )}
-                </Field>
-              </FormFieldContainer>
-            )
-          )}
-          {formFields?.buttons?.map(
-            (
-              { name, type, onSubmitHandler, style }: any,
-              index: React.Key | null | undefined
-            ) => (
-              <FormFieldContainer>
-                <Button
-                  key={index}
-                  title={name}
-                  clickHandler={
-                    type === submit
-                      ? handleSubmit(onSubmitHandler)
-                      : onSubmitHandler
-                  }
-                  buttonStyle={style}
-                />
-              </FormFieldContainer>
-            )
-          )}{" "}
-        </Form>
+        <FormController formFields={formFields} />
       </FormContainer>
       {popupData.isOpen && <Popup />}
     </Section>
@@ -178,24 +121,6 @@ export const LogoContainer = styled.div`
   width: 10rem;
 `;
 
-const FormContainer = styled.div`
-  background: ${AppColors.ThemeTransparencyWhite};
-  width: 25rem;
-  border-radius: 0.5rem;
-  ${sharedFlexSpaceBetween}
-  flex-direction: column;
-  color: #ffffff;
-  letter-spacing: 0.5px;
-  padding: 2rem 0;
-  border: 2px solid ${AppColors.ThemeTransparencyWhiteLight}
-`;
-
-export const FormTitle = styled.h1`
-  padding: 1rem 2rem 1.5rem;
-  font-size: 2.1rem;
-  color: ${AppColors.White};
-`;
-
 export const Link = styled.a`
   color: ${AppColors.ThemeBlue};
   font-weight: 700;
@@ -203,62 +128,8 @@ export const Link = styled.a`
   text-decoration: none;
 `;
 
-const Form = styled.form`
-  ${sharedFlexCenter}
-  width:90%;
-  flex-direction: column;
-`;
-
-const FormFieldContainer = styled.div`
-  ${sharedFlexCenter}
-  width:80%;
-  flex-direction: column;
-  margin-top: 1.5rem;
-`;
-
-const Field = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  width: 100%;
-`;
-
-const Label = styled.label`
-  font-weight: 600;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  margin-right: 1rem;
-  text-transform: capitalize;
-  width: max-content;
-`;
-
-const styledInputStyle = css`
-  background: ${AppColors.ThemeTransparencyWhiteLight};
-  height: 2.5rem;
-  border-radius: 0.2rem;
-  margin-top: 0.5rem;
-  font-size: 1rem;
-  font-weight: 300;
-  border: none;
-  padding: 0.2rem 0.5rem;
-  color: ${AppColors.White};
-  &::placeholder {
-    color: ${AppColors.White};
-    font-weight: 100;
-  }
-`;
-
-const loginButtonStyle = css`
-  padding: 1rem;
-  width: 100%;
-  background: ${AppColors.ThemeGreen};
-  color: ${AppColors.White};
-  font-size: 1.25rem;
-  margin-top: 1rem;
-`;
 const registerButtonStyle = css`
-  ${loginButtonStyle}
+  ${submitButtonStyle}
   background: ${AppColors.ThemeBlack};
   margin-top: 0rem;
 `;
