@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import Layout from "../components/Layout";
 import Table from "../components/Table";
 import styled, { css } from "styled-components";
 import Button from "../components/Button";
-import { sharedButtonStyle, sharedFlexCenter } from "../styles/global";
+import { Section, sharedButtonStyle, sharedFlexCenter } from "../styles/global";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { CSVLink } from "react-csv";
@@ -74,7 +74,7 @@ function TableView() {
 
   return (
     <Layout>
-      <Section>
+      <Container>
         <ToastContainer
           position="bottom-right"
           autoClose={2000}
@@ -104,7 +104,7 @@ function TableView() {
             id={"my-table"}
           />
         </TableContainer>
-      </Section>
+      </Container>
     </Layout>
   );
 }
@@ -115,12 +115,8 @@ const TableContainer = styled.div`
   width: 90%;
 `;
 
-const Section = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 90%;
-  align-items: center;
+const Container = styled(Section)`
+  width:100%;
 `;
 
 const BtnContainer = styled.div`

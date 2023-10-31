@@ -1,11 +1,20 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { useTable, usePagination, useSortBy, useGlobalFilter } from "react-table";
+import {
+  useTable,
+  usePagination,
+  useSortBy,
+  useGlobalFilter,
+} from "react-table";
 import AppColors from "../styles/colors";
 import { FaSortAmountUp, FaSortAmountDown } from "react-icons/fa";
 import { BiFirstPage, BiLastPage } from "react-icons/bi";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import { sharedButtonStyle, sharedFlexCenter, sharedFlexSpaceBetween } from "../styles/global";
+import {
+  sharedFlexCenter,
+  sharedFlexSpaceBetween,
+  styledInputStyle,
+} from "../styles/global";
 import Input from "./Input";
 
 interface TableProps {
@@ -16,12 +25,11 @@ interface TableProps {
 }
 
 const Table: React.FC<TableProps> = ({ title, data, columns, id }) => {
-
   const tableInstance = useTable(
     {
       columns: columns,
       data: data,
-      initialState: { pageIndex: 0, pageSize: 5 }
+      initialState: { pageIndex: 0, pageSize: 5 },
     },
     useGlobalFilter,
     useSortBy,
@@ -33,7 +41,6 @@ const Table: React.FC<TableProps> = ({ title, data, columns, id }) => {
     headerGroups, // headerGroups, if your table has groupings
     getTableBodyProps, // table body props from react-table
     prepareRow, // Prepare the row (this function needs to be called for each row before getting the row props)
-    footerGroups,
     state,
     setGlobalFilter,
     page, // use, page or rows
@@ -44,7 +51,7 @@ const Table: React.FC<TableProps> = ({ title, data, columns, id }) => {
     pageOptions,
     gotoPage,
     pageCount,
-    setPageSize
+    setPageSize,
   } = tableInstance;
 
   const { globalFilter, pageIndex, pageSize } = state;
@@ -52,14 +59,17 @@ const Table: React.FC<TableProps> = ({ title, data, columns, id }) => {
   return (
     <>
       <HeaderContainer>
-      <Search>
-      Search:{" "}
-      <Input value={globalFilter || ""} onChangeHandler={(value : any) => setGlobalFilter(value)} inputStyle={searchInputStyle}/>
-      </Search>
-      <SelectContainer
+        <Search>
+          Search:{" "}
+          <Input
+            value={globalFilter || ""}
+            onChangeHandler={(value: any) => setGlobalFilter(value)}
+            inputStyle={searchInputStyle}
+          />
+        </Search>
+        <SelectContainer
           value={pageSize}
           onChange={(e) => setPageSize(Number(e.target.value))}
-          // size={2}
         >
           {[5, 10, 15].map((pageSize) => (
             <OptionTag key={pageSize} value={pageSize}>
@@ -67,42 +77,50 @@ const Table: React.FC<TableProps> = ({ title, data, columns, id }) => {
             </OptionTag>
           ))}
         </SelectContainer>
-        </HeaderContainer>
+      </HeaderContainer>
       <Container>
-      <TableView {...getTableProps()} id={id}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <ColumnHeader {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render("Header")}
-                  <span>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? <FaSortAmountDown size={16} />
-                        : <FaSortAmountUp size={16} />
-                      : ""}
-                  </span>
-                </ColumnHeader>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <TableRow {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <TableCell {...cell.getCellProps()}>{cell.render("Cell")}</TableCell>
-                  );
-                })}
-              </TableRow>
-            );
-          })}
-        </tbody>
-      </TableView>
+        <TableView {...getTableProps()} id={id}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <ColumnHeader
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                  >
+                    {column.render("Header")}
+                    <span>
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <FaSortAmountDown size={16} />
+                        ) : (
+                          <FaSortAmountUp size={16} />
+                        )
+                      ) : (
+                        ""
+                      )}
+                    </span>
+                  </ColumnHeader>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <TableRow {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <TableCell {...cell.getCellProps()}>
+                        {cell.render("Cell")}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+          </tbody>
+        </TableView>
       </Container>
       <Pagination>
         <span>
@@ -112,20 +130,26 @@ const Table: React.FC<TableProps> = ({ title, data, columns, id }) => {
           </strong>{" "}
         </span>
         <BtnContainer>
-          <PaginationBtn onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-            <BiFirstPage  size={20} />
+          <PaginationBtn
+            onClick={() => gotoPage(0)}
+            disabled={!canPreviousPage}
+          >
+            <BiFirstPage size={20} />
           </PaginationBtn>{" "}
-          <PaginationBtn onClick={() => previousPage()} disabled={!canPreviousPage}>
-            <MdKeyboardArrowLeft  size={20} />
+          <PaginationBtn
+            onClick={() => previousPage()}
+            disabled={!canPreviousPage}
+          >
+            <MdKeyboardArrowLeft size={20} />
           </PaginationBtn>{" "}
           <PaginationBtn onClick={() => nextPage()} disabled={!canNextPage}>
-            <MdKeyboardArrowRight  size={20} />
+            <MdKeyboardArrowRight size={20} />
           </PaginationBtn>{" "}
           <PaginationBtn
             onClick={() => gotoPage(pageCount - 1)}
             disabled={!canNextPage}
           >
-            <BiLastPage  size={20} />
+            <BiLastPage size={20} />
           </PaginationBtn>{" "}
         </BtnContainer>
       </Pagination>
@@ -138,13 +162,15 @@ export default React.memo(Table);
 const TableView = styled.table`
   width: 100%;
   border-spacing: 0;
+  background: ${AppColors.ThemeTransparencyWhite};
+  color: ${AppColors.White};
 `;
 const ColumnHeader = styled.th`
-  background: ${AppColors.ThemeLightestPurple};
   padding: 1rem;
-  border-bottom: 1px solid #1a1a1a;
+  border-bottom: 1px solid ${AppColors.White};
   font-weight: bold;
   text-align: center;
+  background: ${AppColors.ThemePrimaryTransparencyBlack};
 `;
 const TableCell = styled.td`
   padding: 1rem;
@@ -152,53 +178,58 @@ const TableCell = styled.td`
 `;
 const TableRow = styled.tr`
   &:nth-child(2n) {
-    background: ${AppColors.ThemeBlueShadow};
+    background: ${AppColors.ThemePrimaryTransparencyBlack};
   }
 `;
 
 const Container = styled.div`
   height: 25rem;
   overflow: scroll;
-  `
+`;
 
 const Pagination = styled.div`
-margin: 2rem;
-${sharedFlexCenter}
-justify-content: flex-end;
-`
+  margin: 2rem;
+  ${sharedFlexCenter}
+  justify-content: flex-end;
+  color: ${AppColors.White};
+`;
 
 const PaginationBtn = styled.button`
-    font-weight: 700;
-    padding: 0.5rem;
-`
+  font-weight: 700;
+  padding: 0.5rem;
+`;
 
 const Search = styled.div`
-  display:flex;
+  display: flex;
   align-items: center;
   margin: 2rem 1rem;
   font-weight: 600;
-  width:100%;
-`
+  width: 100%;
+  color: ${AppColors.White};
+`;
 const searchInputStyle = css`
+  ${styledInputStyle}
   width: 30%;
   margin-left: 1rem;
-`
+`;
 
 const HeaderContainer = styled.div`
-${sharedFlexSpaceBetween}
-`
+  ${sharedFlexSpaceBetween}
+`;
 
 const SelectContainer = styled.select`
   padding: 0.5rem;
   font-size: 1rem;
-`
+  background: ${AppColors.ThemeTransparencyWhite};
+  color: ${AppColors.White};
+`;
 
 const OptionTag = styled.option`
-  background: ${AppColors.ThemeBlue};
-  padding:  0.5rem;
+  background: ${AppColors.ThemePrimaryTransparencyBlack};
+  padding: 0.5rem;
   font-size: 1rem;
-`
+`;
 
 const BtnContainer = styled.div`
   margin-left: 1rem;
-`
+`;
