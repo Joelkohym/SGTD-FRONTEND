@@ -84,7 +84,7 @@ function Login() {
       });
       if (res) {
         localStorage.setItem("access_token", res.access_token);
-        navigate(AppRoutes.TableView);
+        navigate(AppRoutes.VesselETA);
       }
     } catch (error) {
       alertMessage.current = "Login Failed! Try Again";
