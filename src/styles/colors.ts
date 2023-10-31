@@ -18,6 +18,7 @@ enum AppColors {
     ThemeBlueShadow = "#d5dcef",
     ThemeAqua = "#56d8e4",
     ThemeSkyBlue = "#3498db",
+    ThemeLightBlue = "#23a2f6",
 
     ThemePurple = "#b92f90",
     ThemeLightPurple = "#da61ff",
@@ -28,7 +29,9 @@ enum AppColors {
     ThemeError = "#f44336",
 
     ThemeRed = "#590505",
-    ThemeLightRed = "#f55656"
+    ThemeLightRed = "#f55656",
+    ThemeDarkOrange = "#ff512f",
+    ThemeDarkYellow = "#f09819"
 }
 
 export default AppColors;
