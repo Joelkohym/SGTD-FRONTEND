@@ -11,6 +11,8 @@ import AppColors from "../styles/colors";
 import { Image, sharedFlexCenter } from "../styles/global";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AppRoutes } from "../lib/constants";
+import { useResetAtom } from "jotai/utils";
+import { AuthDataAtom } from "../jotai/store";
 
 interface LayoutProps {
   children?: any;
@@ -41,6 +43,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [showMenu, setShowMenu] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  const resetToken = useResetAtom(AuthDataAtom)
   return (
     <DrawerContainer>
       <SideMenu $showMenu={showMenu}>
@@ -55,7 +58,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   $isActive={location.pathname == btnData.link}
                   $showMenu={showMenu}
                   onClick={() => {
-                    if (btnData.label == "Logout") localStorage.removeItem('access_token')
+                    if (btnData.label == "Logout") resetToken()
                     navigate(btnData.link)
                   }}
                   key={index}

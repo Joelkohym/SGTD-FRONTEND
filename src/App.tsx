@@ -8,6 +8,7 @@ import TableView from "./pages/TableView";
 import VesselMap from "./pages/VesselMap";
 import VesselETA from "./pages/VesselETA";
 import MapQuery from "./pages/MapQuery";
+import ProtectedRoute from "./lib/ProtectedRoute";
 
 function App() {
   return (
@@ -16,10 +17,38 @@ function App() {
         <Route path={AppRoutes.Login} element={<Login />} />
         <Route path={AppRoutes.Register} element={<Register />} />
         <Route path={AppRoutes.Home} element={<Home />} />
-        <Route path={AppRoutes.MapQuery} element={<MapQuery />} />
-        <Route path={AppRoutes.TableView} element={<TableView />} />
-        <Route path={AppRoutes.VesselETA} element={<VesselETA/>} />
-        <Route path={AppRoutes.VesselMap} element={<VesselMap />} />
+        <Route
+          path={AppRoutes.MapQuery}
+          element={
+            <ProtectedRoute>
+              <MapQuery />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={AppRoutes.TableView}
+          element={
+            <ProtectedRoute>
+              <TableView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={AppRoutes.VesselETA}
+          element={
+            <ProtectedRoute>
+              <VesselETA />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={AppRoutes.VesselMap}
+          element={
+            <ProtectedRoute>
+              <VesselMap />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </HashRouter>
   );

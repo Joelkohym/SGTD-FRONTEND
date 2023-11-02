@@ -18,8 +18,8 @@ import { useNavigate } from "react-router-dom";
 import { useMakePOSTRequest } from "../hooks/useMakePostRequest";
 import Popup from "../components/Popup";
 import { useResetAtom } from "jotai/utils";
-import { popupAtom } from "../jotai/store";
-import { useAtom } from "jotai";
+import { AuthDataAtom, popupAtom } from "../jotai/store";
+import { useAtom, useSetAtom } from "jotai";
 import { useRef } from "react";
 import FormController from "../components/FormController";
 
@@ -30,6 +30,7 @@ function Login() {
   const resetPopup = useResetAtom(popupAtom);
   const [popupData, setPopupData] = useAtom(popupAtom);
   const alertMessage = useRef("");
+  const setToken = useSetAtom(AuthDataAtom)
 
   const formFields = {
     fields: [
@@ -83,7 +84,7 @@ function Login() {
         password: data.password,
       });
       if (res) {
-        localStorage.setItem("access_token", res.access_token);
+        setToken(res.access_token);
         navigate(AppRoutes.VesselETA);
       }
     } catch (error) {
