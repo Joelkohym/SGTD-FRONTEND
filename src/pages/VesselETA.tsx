@@ -60,12 +60,23 @@ const VesselETA: React.FC = () => {
   const handleVesselQuery = async (data: any) => {
     setIsLoading(true);
     try {
-      let res = await getVesselTableData(API_Methods.Table_view, {
+      let res: any = await getVesselTableData(API_Methods.Table_view, {
         imo: data.vessel_imo,
       });
       setIsLoading(false);
-      if (res)
+      if (res.data) {
         navigate(AppRoutes.TableView, { state: { imo: data.vessel_imo } });
+      } else {
+        setPopupData({
+          isOpen: true,
+          message: "Session expired! Please login again",
+          type: AlertType.Error,
+          btnHandler: () => {
+            resetPopup();
+            navigate(AppRoutes.Login);
+          },
+        });
+      }
     } catch (error) {
       setIsLoading(false);
       alertMessage.current = "IMO(s) could not found";
