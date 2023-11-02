@@ -11,7 +11,7 @@ interface FormProps {
 }
 
 const FormController: React.FC<FormProps> = ({ formFields }) => {
-  const { control, handleSubmit, formState } = useForm(); //TODO: controller is used to register external component(i.e Input, dropdown) values to form.
+  const { control, handleSubmit } = useForm(); //TODO: controller is used to register external component(i.e Input, dropdown) values to form.
   const { submit } = formFieldTypes;
 
   return (

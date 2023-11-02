@@ -10,7 +10,7 @@ import { CSVLink } from "react-csv";
 import AppColors from "../styles/colors";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { PDFColumns, columns } from "../lib/dummyData";
+import { PDFColumns, columns } from "../lib/tableData";
 import { useLocation } from "react-router-dom";
 import { useMakePOSTRequest } from "../hooks/useMakePostRequest";
 import { API_Methods } from "../lib/constants";
