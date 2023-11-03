@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Layout from "../components/Layout";
 import Table from "../components/Table";
 import styled, { css } from "styled-components";
@@ -17,14 +17,15 @@ import { API_Methods } from "../lib/constants";
 import { useAtom } from "jotai";
 import { loaderAtom } from "../jotai/store";
 import Loader from "../components/Loader";
+import * as XLSX from "xlsx";
 
 function TableView() {
   const { state } = useLocation();
   const { imo } = state;
-  const tableRef = useRef(null);
   const [getVesselTableData] = useMakePOSTRequest();
   const [tableData, setTableData] = useState<any>([]);
   const [isLoading, setIsLoading] = useAtom(loaderAtom);
+  const [filteredData, setFilteredData] = useState<any>([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -60,34 +61,40 @@ function TableView() {
     const title = "Table Title";
     doc.text(title, marginLeft, 25);
     autoTable(doc, {
-      body: [...tableData],
+      body: [...filteredData],
       columns: PDFColumns,
     });
-    doc.save("Vessel_data.pdf");
+    doc.save("Vessel Request Data.pdf");
   };
 
-  const csvData = [
-    [
-      "INDEX",
-      "Due To Arrive Time",
-      "locationFrom",
-      "Vessel Name",
-      "Call Sign",
-      "IMO number",
-      "Flag",
-      "Due To Depart Time",
-    ],
-    ...tableData.map((data: any) => [
-      data.index + 1,
-      data.duetoArriveTime,
-      data.locationFrom,
-      data.vesselName,
-      data.callSign,
-      data["IMO number"],
-      data.flag,
-      data.dueToDepartTime,
-    ]),
-  ];
+  const csvData = useMemo(() => {
+    const rows =
+      filteredData.length > 0
+        ? filteredData.map((data: any) => [
+            data.index + 1,
+            data.duetoArriveTime,
+            data.locationFrom,
+            data.vesselName,
+            data.callSign,
+            data["IMO number"],
+            data.flag,
+            data.dueToDepartTime,
+          ])
+        : [];
+    return [
+      [
+        "INDEX",
+        "Due To Arrive Time",
+        "locationFrom",
+        "Vessel Name",
+        "Call Sign",
+        "IMO number",
+        "Flag",
+        "Due To Depart Time",
+      ],
+      ...rows,
+    ];
+  }, [filteredData]);
 
   const copyTable = () => {
     const elTable = document.querySelector("table");
@@ -113,6 +120,28 @@ function TableView() {
     toast.success("Copied to clipboard!!");
   };
 
+  const exportToExcel = () => {
+    const ws = XLSX.utils.aoa_to_sheet(csvData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    const blob = new Blob(
+      [XLSX.write(wb, { bookType: "xlsx", type: "array" })],
+      {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      }
+    );
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Vessel Request Data.xlsx";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const getFilteredRows = (rows: any) => {
+    setFilteredData(rows.map((data: any) => data.original));
+  }
+
   return (
     <>
       <Layout>
@@ -128,8 +157,12 @@ function TableView() {
               clickHandler={exportToPDF}
               buttonStyle={btnStyle}
             />
-
-            <StyledCSVLink filename="vessel_data.csv" data={csvData}>
+            <Button
+              title={"EXCEL"}
+              clickHandler={exportToExcel}
+              buttonStyle={btnStyle}
+            />
+            <StyledCSVLink filename="Vessel Request Data.csv" data={csvData}>
               CSV
             </StyledCSVLink>
             <Button
@@ -139,12 +172,13 @@ function TableView() {
             />
           </BtnContainer>
           {!isLoading && (
-            <TableContainer ref={tableRef}>
+            <TableContainer>
               <Table
                 title={"Table view"}
                 data={tableData}
                 columns={columns}
                 id={"my-table"}
+                getFilteredRows={getFilteredRows}
               />
             </TableContainer>
           )}
@@ -188,4 +222,5 @@ const StyledCSVLink = styled(CSVLink)`
   color: ${AppColors.White};
   cursor: pointer;
   text-align: center;
+  width: 4rem;
 `;

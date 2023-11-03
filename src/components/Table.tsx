@@ -22,9 +22,10 @@ interface TableProps {
   data: any[];
   columns: any[];
   id?: string;
+  getFilteredRows: Function;
 }
 
-const Table: React.FC<TableProps> = ({ title, data, columns, id }) => {
+const Table: React.FC<TableProps> = ({ title, data, columns, id, getFilteredRows }) => {
   const tableInstance = useTable(
     {
       columns: columns,
@@ -52,10 +53,15 @@ const Table: React.FC<TableProps> = ({ title, data, columns, id }) => {
     gotoPage,
     pageCount,
     setPageSize,
+    rows
   } = tableInstance;
 
   const { globalFilter, pageIndex, pageSize } = state;
 
+  React.useEffect(() => {
+    getFilteredRows(rows)
+  }, [rows]);
+  
   return (
     <>
       <HeaderContainer>
