@@ -9,14 +9,15 @@ export const formFieldTypes = {
   };
 
 export const AppRoutes = {
-  Home : "/home",
-  Login : "/",
+  Home : "/",
+  Login : "/Login",
   Register: "/register",
   MapQuery: "/MapQuery",
   TableView : "/tableView",
   TriangularModule: "/triangularModule",
   VesselMap: "/VesselMap",
-  VesselETA: "/VesselETA"
+  VesselETA: "/VesselETA",
+  UploadFile: "/UploadFile"
 }
 
 export const API_ENDPOINT = "https://sgtd-api-test.onrender.com"

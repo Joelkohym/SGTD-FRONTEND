@@ -10,6 +10,7 @@ import VesselETA from "./pages/VesselETA";
 import MapQuery from "./pages/MapQuery";
 import ProtectedRoute from "./lib/ProtectedRoute";
 import { Provider } from "jotai";
+import UploadFile from "./pages/UploadFile";
 
 function App() {
   return (
@@ -18,7 +19,14 @@ function App() {
         <Routes>
           <Route path={AppRoutes.Login} element={<Login />} />
           <Route path={AppRoutes.Register} element={<Register />} />
-          <Route path={AppRoutes.Home} element={<Home />} />
+          <Route
+            path={AppRoutes.Home}
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path={AppRoutes.MapQuery}
             element={
@@ -48,6 +56,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <VesselMap />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={AppRoutes.UploadFile}
+            element={
+              <ProtectedRoute>
+                <UploadFile />
               </ProtectedRoute>
             }
           />

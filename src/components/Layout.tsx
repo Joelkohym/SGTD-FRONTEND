@@ -6,6 +6,7 @@ import {
   FaMapMarkedAlt
 } from "react-icons/fa";
 import { TbBrandGoogleBigQuery } from "react-icons/tb";
+import {PiUploadSimpleBold} from "react-icons/pi"
 import styled from "styled-components";
 import AppColors from "../styles/colors";
 import { Image, sharedFlexCenter } from "../styles/global";
@@ -29,6 +30,12 @@ const NavButtonData = [
     label: "Vessel ETA",
     link: AppRoutes.VesselETA,
     icon: <TbBrandGoogleBigQuery size={25} />,
+    isPublic: true,
+  },
+  {
+    label: "Upload File",
+    link: AppRoutes.UploadFile,
+    icon: <PiUploadSimpleBold size={25} />,
     isPublic: true,
   },
   {
