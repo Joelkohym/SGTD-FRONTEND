@@ -394,3 +394,35 @@ export const mapData: mapDataProps[] = [
     name: "Very Large Crude Carrier Anchorage (Abbreviated Code: AVLCC)",
   },
 ];
+
+
+export const vesselData = {
+  vesselName: "CSC AUSPICIOUS",
+  callSign: "VRDW8",
+  imoNumber: 9406374,
+  flag: "HK",
+  vesselLenghth: 178.0,
+  vesselBreadth: 0.0,
+  vesselDepth: 0.0,
+  vesselType: "TA",
+  grossTonnage: 29593.0,
+  netTonnage: 12466.0,
+  deadweight: 45852.0,
+  mmsiNumber: 477048500,
+  yearBuilt: 2008,
+  latitude: 0.0225914,
+  longitude: 1.81019,
+  latitudeDegrees: 1.29439,
+  longitudeDegrees: 103.716,
+  speed: 0.0,
+  course: 0.0,
+  heading: 278.998,
+  timeStamp: "2023-11-02 20:04:51",
+  time_queried: "2023-11-02 12:06:51",
+  location: "WESTERN PERTRO ANCH B",
+  grid: "4912A",
+  purpose: "#4 Taking Ship Supplies",
+  agent: "SEAMARITIME AGENCY PTE LTD",
+  reported_arrival_time: "2023-10-30 11:22:00"
+
+}

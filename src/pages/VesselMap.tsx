@@ -4,7 +4,7 @@ import { tileLayer } from "../lib/constants";
 import { LatLngExpression } from "leaflet";
 import Layout from "../components/Layout";
 import styled from "styled-components";
-import { mapData } from "../lib/mapData";
+import { mapData, vesselData } from "../lib/mapData";
 import PolygonMarker from "../components/PolygonMarker";
 import { Section, sharedFlexCenter } from "../styles/global";
 import VesselMarker from "../components/VesselMarker";
@@ -18,9 +18,9 @@ const VesselMap = () => {
         <MapSection>
           <MapContainer
             center={center}
-            zoom={11}
+            zoom={12}
             scrollWheelZoom={true}
-            style={{ width: "45rem", height: "35rem" }}
+            style={{ width: "100%", height: "100%" }}
           >
             <TileLayer {...tileLayer} />
             {/* <Marker position={[51.505, -0.09]}>
@@ -34,7 +34,7 @@ const VesselMap = () => {
                 />
               );
             })}
-            <VesselMarker coordinates={[1.20442, 103.81]} />
+            <VesselMarker coordinates={[1.20442, 103.81]} vesselInfo={vesselData}/>
           </MapContainer>
         </MapSection>
       </Container>
@@ -45,8 +45,8 @@ const VesselMap = () => {
 export default VesselMap;
 
 const MapSection = styled.div`
-  width: 45rem;
-  height: 35rem;
+  width: 90%;
+  height: 90%;
   border: 2px solid black;
 `;
 const Container = styled(Section)`
