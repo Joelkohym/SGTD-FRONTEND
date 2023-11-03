@@ -68,12 +68,12 @@ const FormContainer = styled.div`
   border-radius: 0.5rem;
   ${sharedFlexSpaceBetween}
   flex-direction: column;
-  color: #ffffff;
+  color: ${AppColors.White};
   letter-spacing: 0.5px;
   padding: 2rem 0;
   border: 2px solid ${AppColors.ThemeTransparencyWhiteLight};
   z-index: 5;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
 `;
 
 export const FormTitle = styled.h1`
@@ -87,6 +87,7 @@ export const sharedCircleStyle = css`
   height:12rem;
   border-radius: 50%;
   position: absolute;
+  filter: blur(2px);
 `
 
 export{

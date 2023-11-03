@@ -4,7 +4,7 @@ import { AuthDataAtom } from '../jotai/store';
 import { AppRoutes } from './constants';
 
 const ProtectedRoute = ({children} : any) => {
-    const token = useAtomValue(AuthDataAtom)
+    const token = localStorage.getItem("access_token")
     let location = useLocation();
 
     if(!token) {
