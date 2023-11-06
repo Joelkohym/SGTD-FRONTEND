@@ -1,12 +1,14 @@
-import React from 'react'
-import Layout from '../components/Layout'
+import Layout from "../components/Layout";
+import { Container } from "./VesselETA";
 
 function Home() {
   return (
-    <Layout >
-    <div>Home</div>
+    <Layout>
+      <Container>
+        <div> This is Home Page</div>
+      </Container>
     </Layout>
-  )
+  );
 }
 
-export default Home
+export default Home;

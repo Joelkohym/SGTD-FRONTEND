@@ -74,4 +74,6 @@ const Button = styled.button`
   color: ${AppColors.White};
   font-size: 1rem;
   margin-left: 1rem;
+  border: none;
+  font-weight: 600;
 `;
