@@ -68,12 +68,12 @@ const UploadForm = styled.form`
   ${sharedFlexSpaceBetween}
 `;
 const Button = styled.button`
-  padding: 1rem;
+  padding: 1.2rem;
   width: 10rem;
   background: ${AppColors.ThemeGreen};
   color: ${AppColors.White};
   font-size: 1rem;
-  margin-left: 1rem;
+  margin: 1rem 0.5rem 0 0;
   border: none;
   font-weight: 600;
 `;
