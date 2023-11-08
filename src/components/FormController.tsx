@@ -40,9 +40,6 @@ const FormController: React.FC<FormProps> = ({ formFields, submitHandler }) => {
                         placeholder={formField.placeholder}
                         readOnly={formField.readOnly}
                         disabled={formField.disabled}
-                        enableInputStyleWithValue={
-                          formField?.enableInputStyleWithValue
-                        }
                       />
                     </>
                   )}
