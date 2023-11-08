@@ -57,7 +57,6 @@ function Login() {
       {
         name: "Log In",
         type: submit,
-        onSubmitHandler: (data: any) => handleLogin(data),
         style: submitButtonStyle,
       },
       {
@@ -69,15 +68,6 @@ function Login() {
   };
 
   const handleLogin = async (data: any) => {
-    if (data.email == "") {
-      alertMessage.current = "Email cannot be empty";
-      handlePopupData();
-      return;
-    } else if (data.password == "") {
-      alertMessage.current = "Password cannot be empty";
-      handlePopupData();
-      return;
-    }
     try {
       let res: any = await getLogin(API_Methods.Login, {
         email: data.email,
@@ -109,7 +99,7 @@ function Login() {
       </LogoContainer>
       <FormContainer>
         <FormTitle>Login Here</FormTitle>
-        <FormController formFields={formFields} />
+        <FormController formFields={formFields} submitHandler={handleLogin}/>
       </FormContainer>
       {popupData.isOpen && <Popup />}
     </Section>

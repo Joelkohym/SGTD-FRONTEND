@@ -8,14 +8,15 @@ import { sharedFlexCenter } from "../styles/global";
 
 interface FormProps {
   formFields: any;
+  submitHandler?: Function;
 }
 
-const FormController: React.FC<FormProps> = ({ formFields }) => {
+const FormController: React.FC<FormProps> = ({ formFields, submitHandler }) => {
   const { control, handleSubmit } = useForm(); //TODO: controller is used to register external component(i.e Input, dropdown) values to form.
   const { submit } = formFieldTypes;
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit((data) => submitHandler && submitHandler(data))}>
       {formFields?.fields?.map(
         (formField: any, index: React.Key | null | undefined) => (
           <FormFieldContainer key={index}>
@@ -62,7 +63,7 @@ const FormController: React.FC<FormProps> = ({ formFields }) => {
               title={name}
               clickHandler={
                 type === submit
-                  ? handleSubmit(onSubmitHandler)
+                  ? undefined
                   : onSubmitHandler
               }
               buttonStyle={style}
