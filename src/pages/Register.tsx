@@ -94,21 +94,6 @@ function Register() {
   };
 
   const handleRegister = async (data: any) => {
-    if (
-      (data.email == "" ||
-        data.password == "" ||
-        data.api_key == "" ||
-        data.participant_id == "",
-      data.gsheet_cred_path == "" || data.pitstop_url == "")
-    ) {
-      alertMessage.current = {
-        type: AlertType.Error,
-        message: "Fields cannot be empty",
-        action: resetPopup,
-      };
-      handlePopup();
-      return;
-    }
     try {
       let requestData = {
         email: data.email,
@@ -158,13 +143,13 @@ function Register() {
       </Header>
       <FormContainer>
         <Title>Registration Form</Title>
-        <Form  onSubmit={handleSubmit(handleRegister)}>
+        <Form onSubmit={handleSubmit(handleRegister)}>
           <FieldContainer>
             {formFields?.fields?.map(
               (formField: any, index: React.Key | null | undefined) => (
                 <FormFieldContainer key={index}>
                   <Field>
-                    {formField.defaultValue !== "undefined" && ( //Temporary approach. will be checked once api's available
+                    {formField.defaultValue !== "undefined" && ( 
                       <Controller
                         name={formField.name}
                         control={control}
@@ -208,7 +193,7 @@ function Register() {
                 <Button
                   key={index}
                   title={name}
-                  clickHandler= {() => {}}
+                  clickHandler={() => {}}
                   buttonStyle={style}
                 />
               </FormFieldContainer>

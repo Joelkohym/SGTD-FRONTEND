@@ -51,7 +51,6 @@ const VesselETA: React.FC = () => {
       {
         name: "Search",
         type: submit,
-        onSubmitHandler: (data: any) => handleVesselQuery(data),
         style: submitButtonStyle,
       },
     ],
@@ -65,7 +64,7 @@ const VesselETA: React.FC = () => {
       });
       setIsLoading(false);
       if (res.data) {
-        navigate(AppRoutes.TableView, { state: { imo: data.vessel_imo } });
+        navigate(AppRoutes.TableView, { state: { imo: data.vessel_imo } })
       } else {
         setPopupData({
           isOpen: true,
@@ -101,7 +100,7 @@ const VesselETA: React.FC = () => {
           <OrangeCircle />
           <StyledFormContainer>
             <Title>Vessel ETA Query 🕗</Title>
-            <FormController formFields={formFields} />
+            <FormController formFields={formFields} submitHandler={handleVesselQuery}/>
           </StyledFormContainer>
           {popupData.isOpen && <Popup />}
         </Container>

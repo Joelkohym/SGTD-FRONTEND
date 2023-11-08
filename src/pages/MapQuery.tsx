@@ -26,7 +26,6 @@ const MapQuery: React.FC = () => {
       {
         name: "Request",
         type: submit,
-        onSubmitHandler: (data: any) => handleVesselQueryRequest(data),
         style: submitButtonStyle,
       },
     ],
@@ -42,7 +41,7 @@ const MapQuery: React.FC = () => {
       <OrangeCircle />
       <StyledFormContainer>
         <Title> Map Query 🗺️</Title>
-        <FormController formFields={formFields} />
+        <FormController formFields={formFields} submitHandler={handleVesselQueryRequest}/>
       </StyledFormContainer>
       </Container>
     </Layout>
