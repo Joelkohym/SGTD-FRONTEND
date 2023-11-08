@@ -1,13 +1,9 @@
-import { useAtomValue } from "jotai";
 import {
   API_ENDPOINT,
-  API_Response_Success,
-  Response_Message,
 } from "../lib/constants";
-import { AuthDataAtom } from "../jotai/store";
 
 export function useMakePOSTRequest() {
-  const token = useAtomValue(AuthDataAtom);
+  const token = localStorage.getItem('access_token')
   function makePOSTRequest(methodEndpoint: any, params?: any) {
     return new Promise((resolve, reject) => {
       let data = "";
@@ -22,7 +18,7 @@ export function useMakePOSTRequest() {
         body: data,
       };
       if (token) {
-        requestOptions.headers.Authorization = `Bearer ${token}`;
+        requestOptions.headers.Authorization = `Bearer ${token.replace(/['"]+/g, '')}`;
       }
       console.log("requestOptions", requestOptions);
       fetch(API_ENDPOINT + methodEndpoint, requestOptions)
