@@ -41,7 +41,6 @@ function Register() {
         type: input,
         inputType: email,
         style: InputStyle,
-        enableInputStyleWithValue: true,
       },
       {
         name: "password",
@@ -50,7 +49,6 @@ function Register() {
         inputType: password,
         type: password,
         style: InputStyle,
-        enableInputStyleWithValue: true,
       },
       {
         name: "api_key",
@@ -59,7 +57,6 @@ function Register() {
         type: input,
         inputType: text,
         style: InputStyle,
-        enableInputStyleWithValue: true,
       },
       {
         name: "participant_id",
@@ -68,7 +65,6 @@ function Register() {
         type: input,
         inputType: text,
         style: InputStyle,
-        enableInputStyleWithValue: true,
       },
       {
         name: "gsheet_cred_path",
@@ -77,7 +73,6 @@ function Register() {
         type: input,
         inputType: text,
         style: InputStyle,
-        enableInputStyleWithValue: true,
       },
       {
         name: "pitstop_url",
@@ -86,7 +81,6 @@ function Register() {
         type: url,
         inputType: url,
         style: InputStyle,
-        enableInputStyleWithValue: true,
       },
     ],
     buttons: [
@@ -164,7 +158,7 @@ function Register() {
       </Header>
       <FormContainer>
         <Title>Registration Form</Title>
-        <Form>
+        <Form  onSubmit={handleSubmit(handleRegister)}>
           <FieldContainer>
             {formFields?.fields?.map(
               (formField: any, index: React.Key | null | undefined) => (
@@ -180,6 +174,7 @@ function Register() {
                             <Input
                               title={formField.name}
                               value={field.value ?? formField.defaultValue}
+                              onChangeHandler={field.onChange}
                               type={formField.inputType}
                               inputStyle={formField.style}
                               required={
@@ -189,9 +184,6 @@ function Register() {
                               placeholder={formField.placeholder}
                               readOnly={formField.readOnly}
                               disabled={formField.disabled}
-                              enableInputStyleWithValue={
-                                formField?.enableInputStyleWithValue
-                              }
                             />
                           </>
                         )}
@@ -216,11 +208,7 @@ function Register() {
                 <Button
                   key={index}
                   title={name}
-                  clickHandler={
-                    type === submit
-                      ? handleSubmit(onSubmitHandler)
-                      : onSubmitHandler
-                  }
+                  clickHandler= {() => {}}
                   buttonStyle={style}
                 />
               </FormFieldContainer>
