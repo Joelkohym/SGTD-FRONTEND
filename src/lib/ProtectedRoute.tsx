@@ -1,6 +1,4 @@
-import { useAtomValue } from 'jotai';
 import {Navigate, useLocation} from "react-router-dom"
-import { AuthDataAtom } from '../jotai/store';
 import { AppRoutes } from './constants';
 
 const ProtectedRoute = ({children} : any) => {

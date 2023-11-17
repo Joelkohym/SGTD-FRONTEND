@@ -21,7 +21,7 @@ import * as XLSX from "xlsx";
 
 function TableView() {
   const { state } = useLocation();
-  const { imo } = state;
+  const { imo } = state ? state : '';
   const [getVesselTableData] = useMakePOSTRequest();
   const [tableData, setTableData] = useState<any>([]);
   const [isLoading, setIsLoading] = useAtom(loaderAtom);
@@ -38,8 +38,10 @@ function TableView() {
       let res: any = await getVesselTableData(API_Methods.Table_view, {
         imo: imo,
       });
-      if (res) {
+      if (res.data) {
         setTableData(res.data);
+        setIsLoading(false);
+      } else{
         setIsLoading(false);
       }
     } catch (error) {
@@ -69,18 +71,18 @@ function TableView() {
 
   const csvData = useMemo(() => {
     const rows =
-      filteredData.length > 0
-        ? filteredData.map((data: any) => [
-            data.index + 1,
-            data.duetoArriveTime,
-            data.locationFrom,
-            data.vesselName,
-            data.callSign,
-            data["IMO number"],
-            data.flag,
-            data.dueToDepartTime,
-          ])
-        : [];
+    filteredData.length > 0
+    ? filteredData.map((data: any) => [
+    data.index + 1,
+    data.duetoArriveTime,
+    data.locationFrom,
+    data.vesselName,
+    data.callSign,
+    data["IMO number"],
+    data.flag,
+    data.dueToDepartTime,
+    ])
+    : [];
     return [
       [
         "INDEX",
@@ -141,7 +143,7 @@ function TableView() {
   const getFilteredRows = (rows: any) => {
     setFilteredData(rows.map((data: any) => data.original));
   }
-
+  
   return (
     <>
       <Layout>
